@@ -1,6 +1,7 @@
 const userHandler = require('../handler/userHandler');
 
 const authenticate = (req, res, next) => {
+    console.log(req.body);
     if (!req.body || !req.body.username || !req.body.pin) {
         return res.status(400).json({
             status: 'Error',
