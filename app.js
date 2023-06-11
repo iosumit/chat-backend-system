@@ -5,7 +5,7 @@ const cors = require('cors');
 const morgan = require('morgan');
 const err = require('./server/utils/error')
 const bodyParser = require('body-parser')
-
+const mongodb = require('./server/db/mongodb')
 
 db.dbInit();
 
