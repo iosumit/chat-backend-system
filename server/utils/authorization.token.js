@@ -1,21 +1,21 @@
 const jwt = require("jsonwebtoken");
-const { unauthorization_access } = require("./strings");
-const { SERVER_SECRET } = require("../../env");
+const { strings } = require("./strings");
+const { CONFIG } = require("../../env");
 const async = require('async');
 
-module.exports = function verifyToken(req, res, next) {
+function verifyToken(req, res, next) {
     let model = {};
     async.series([
         cb => {
-            if (!req.headers) return cb(unauthorization_access)
+            if (!req.headers) return cb(strings.unauthorization_access)
             let token = req.headers.authorization;
-            if (!token) return cb(unauthorization_access)
+            if (!token) return cb(strings.unauthorization_access)
 
             token = token.split(' ');
-            if (token.length != 2) return cb(unauthorization_access)
+            if (token.length != 2) return cb(strings.unauthorization_access)
 
-            jwt.verify(token[1], SERVER_SECRET, (err, res) => {
-                if (err) return cb(unauthorization_access)
+            jwt.verify(token[1], CONFIG.SERVER_AUTH_TOKEN_SECRET, (err, res) => {
+                if (err) return cb(strings.unauthorization_access)
 
                 model.user = res
                 return cb()
@@ -32,3 +32,7 @@ module.exports = function verifyToken(req, res, next) {
         }
     })
 }
+const createToken = (user) => jwt.sign(user, CONFIG.SERVER_AUTH_TOKEN_SECRET, {
+    expiresIn: '7d'
+})
+module.exports = { verifyToken, createToken }
