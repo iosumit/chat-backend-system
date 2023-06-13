@@ -7,8 +7,9 @@ const bodyParser = require('body-parser')
 const mongodb = require('./server/db/mongodb')
 const { ERROR } = require('./server/utils/consts')
 
-const userRoute = require('./server/routes/userRoutes');
-const chatRoute = require('./server/routes/chatRoutes');
+const userRoutes = require('./server/routes/userRoutes');
+const chatRoutes = require('./server/routes/chatRoutes');
+const channelRoutes = require('./server/routes/channelRoutes');
 
 
 app.use(cors({
@@ -18,8 +19,9 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(morgan('dev'))
 
-app.use('/user', userRoute);
-// app.use('/chat', chatRoute);
+app.use('/user', userRoutes);
+app.use('/channel', channelRoutes);
+app.use('/chat', chatRoutes);
 // app.use('/setting', userRoute);
 
 app.use((req, res, next) => {

@@ -1,7 +1,4 @@
 const User = require('../model/user');
-const db = require("../db/db");
-const jwt = require('jsonwebtoken');
-const env = require('../../env');
 const async = require('async');
 const authorization = require('../utils/authorization.token');
 const mongoose = require('mongoose');
