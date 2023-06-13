@@ -27,14 +27,25 @@ const authenticate = (req, res, next) => {
         }
     });
 
-
-
-
 }
 const getUser = (req, res, next) => {
-    res.status(200).json({
-        message: "User Detail!"
-    })
+    const inputs = req.user;
+    userHandler.getUserInfo(inputs, (err, result) => {
+        if (err) {
+            res.status(500)
+            res.json({
+                status: ERROR,
+                message: err
+            })
+        } else {
+            res.status(200)
+            res.json({
+                status: SUCCESS,
+                message: strings.fetched_successfully,
+                data: result
+            })
+        }
+    });
 }
 const createNewUser = (req, res, next) => {
     const inputs = {
@@ -50,12 +61,12 @@ const createNewUser = (req, res, next) => {
             res.status(500)
             res.json({
                 status: ERROR,
-                data: strings.unable_to_create_user_at_this_moment
+                data: err
             })
         } else {
             res.status(201)
             res.json({
-                status: 'Success',
+                status: SUCCESS,
                 message: strings.user_created_successfully,
                 data: result
             })
