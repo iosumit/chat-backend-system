@@ -1,10 +1,8 @@
 const User = require('../model/user');
-const db = require("../db/db");
-const jwt = require('jsonwebtoken');
-const env = require('../../env');
 const async = require('async');
 const authorization = require('../utils/authorization.token');
 const mongoose = require('mongoose');
+const { strings } = require('../utils/strings');
 
 const userAuthenticateHandler = (input, next) => {
     var modelName = {};
@@ -12,7 +10,7 @@ const userAuthenticateHandler = (input, next) => {
         cb => {
             const query = { username: input.username, pin: input.pin, active: true, is_deleted: false }
             getObjectByQuery({ query }, (err, result) => {
-                if (err || !result) { cb("Unsuccessful Attempt!"); }
+                if (err || !result) { return cb(strings.unseccessful_attempt); }
                 else {
                     const ujwt = { _id: result._id, first_name: result.first_name, last_name: result.last_name, created_at: result.created_at, username: result.username };
                     modelName.token = authorization.createToken(ujwt);
@@ -50,8 +48,44 @@ const createNewUser = (input, next) => {
                     modelName.user = ujwt
                     return cb()
                 })
-                .catch(err => cb(err))
+                .catch(err => {
+                    if (err.code == 11000) {
+                        return cb(strings.user_already_exist)
+                    }
+                    return cb(strings.unable_to_create_user_at_this_moment)
+                })
         }
+    ], err => {
+        if (err) {
+            next(err)
+        } else {
+            next(null, modelName)
+        }
+    })
+}
+
+const getUserInfo = (input, next) => {
+    var modelName = {};
+    async.series([
+        cb => {
+            const query = { _id: input._id, username: input.username, active: true, is_deleted: false }
+            getObjectByQuery({ query }, (err, result) => {
+                if (err || !result) { cb(strings.unauthorization_access); }
+                else {
+                    const user = {
+                        _id: result._id,
+                        first_name: result.first_name,
+                        last_name: result.last_name,
+                        username: result.username,
+                        profile_image_url: result.profile_image_url,
+                        created_at: result.created_at,
+                        updated_at: result.updated_at,
+                    };
+                    modelName.user = user
+                    return cb();
+                }
+            })
+        },
     ], err => {
         if (err) {
             next(err)
@@ -70,5 +104,5 @@ function getObjectByQuery(filters, next) {
 }
 
 module.exports = {
-    userAuthenticateHandler, createNewUser
+    userAuthenticateHandler, createNewUser, getUserInfo
 }
