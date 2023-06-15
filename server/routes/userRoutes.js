@@ -5,7 +5,7 @@ const authorizationToken = require('../utils/authorization.token');
 
 router.post('/authenticate', usersCon.authenticate);
 router.post('/new', usersCon.createNewUser);
-router.get('/info', authorizationToken.verifyToken, usersCon.getUser);
+router.get('/info', authorizationToken.verifyApiAuth, usersCon.getUser);
 
 module.exports = router;
 

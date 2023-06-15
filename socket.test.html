@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Socket.IO chat</title>
+    <style>
+        .box {
+            border: 1px solid rgba(128, 128, 128, 0.532);
+            align-self: center;
+            width: 400px;
+            height: 500px;
+            margin: auto;
+            margin-top: 100px;
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        form {
+            display: flex;
+        }
+
+        button {
+            height: 44px;
+            border-bottom-right-radius: 16px;
+            font-size: 16px;
+        }
+
+        #messages {
+            width: 100%;
+            height: 100%;
+        }
+
+        input {
+            height: 40px;
+            width: 100%;
+            padding-inline: 16px;
+            border-bottom-left-radius: 16px;
+            border: 1px solid rgba(128, 128, 128, 0.532);
+            font-size: 18px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="box">
+        <ul id="messages"></ul>
+        <form id="form" action="">
+            <input id="input" /><button>Send</button>
+        </form>
+    </div>
+
+
+    <script src="node_modules/socket.io/client-dist/socket.io.js"></script>
+
+    <script>
+        var socket = io("ws://localhost:8300/", {
+            auth: { token: "" }
+        });
+
+        var messages = document.getElementById('messages');
+        var form = document.getElementById('form');
+        var input = document.getElementById('input');
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            if (input.value) {
+                socket.emit('chat', input.value);
+                input.value = '';
+            }
+        });
+
+        socket.on('chat', function (msg) {
+            var item = document.createElement('li');
+            item.textContent = msg;
+            messages.appendChild(item);
+            window.scrollTo(0, document.body.scrollHeight);
+        });
+    </script>
+</body>
+
+</html>
