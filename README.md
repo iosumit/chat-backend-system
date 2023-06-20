@@ -12,17 +12,18 @@ root
 |--- Handler
 |--- Routes
 |--- Utils 
+|--- Model 
 ````
 ---------
 ### Project Setup
-- Create env.js file on root dir
-```python
-const SERVER_SECRET = 'secretKey'; # for generating jwt token
-const MONGO_URI = "mongodb uri"; # mongo db uri
-
-module.exports = {
-    SERVER_SECRET,
-    MONGO_URI
+- Create nodemon.json file on root dir and below
+```json
+{
+    "env": {
+        "ENVIROMENT_TYPE": "PRODUCTION",
+        "MONGO_URI": "Your Credential Of Mongo db",
+        "SERVER_AUTH_TOKEN_SECRET": "Token Secret"
+    }
 }
 ```
 ---
@@ -30,6 +31,7 @@ module.exports = {
 ### Install Required Dependencies
 ```
 npm i
+npm install -g nodemon
 ```
 ### Run
 ```
