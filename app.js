@@ -12,6 +12,8 @@ const chatRoutes = require('./server/routes/chatRoutes');
 const channelRoutes = require('./server/routes/channelRoutes');
 const { verifyToken } = require('./server/utils/authorization.token');
 
+const messageHandler = require('./server/handler/messageHandler')
+
 //--------REST API-----------//
 restApp.use(cors({
     origin: '*'
@@ -39,24 +41,20 @@ restApp.use((error, req, res, next) => {
 // --------!REST API-----------//
 // --------Web Socket-----------//
 const onSocketConnection = (socket) => {
-    console.log('a user connected');
-    // console.log(socket.id)
-    // console.log(socket.data.use)
-    // console.log(socket.request)
-    verifyToken(socket.handshake.auth.token, (err, result) => {
-        if (err) {
-            console.log("Not Verified")
-            socket.disconnect()
-        }
-        else
-            console.log("Verified User")
-    })
+    socket.on("message:send", messageHandler.socketMessageSend);
+    socket.on("message:delete", messageHandler.socketMessageDelete);
+    socket.on("message:update", messageHandler.socketMessageUpdate);
 
-    socket.on("chat", (arg) => {
-        console.log(arg)
-    })
+    socket.on("channel:block", () => { });
+    socket.on("channel:unblock", () => { });
+    socket.on("channel:update", () => { });
+    socket.on("channel:new", () => { });
+
+    socket.on("user:update", () => { });
+    socket.on("user:delete", () => { });
+    // User Connected
+
 }
-
 // --------!Web Socket-----------//
 
 
