@@ -73,8 +73,16 @@ const createNewUser = (req, res, next) => {
         }
     });
 }
+
+const getUserList = (req, res, next) => {
+    
+
+    res.status(200).json(
+        res.advancedResult
+    )
+ }
 module.exports = {
     getUser,
-    authenticate, createNewUser
+    authenticate, createNewUser, getUserList
 };
 
