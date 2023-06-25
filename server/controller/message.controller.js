@@ -5,7 +5,26 @@ const { strings } = require("../utils/strings");
 const getMessages = (req, res, next) => {
     return res.status(200).json({ status: SUCCESS });
 }
-
+const newMessageviaSocket = (payload, socket) => {
+    if (!payload || !messageHandler.isValidMessage(payload)) {
+        return;
+    }
+    const input = {
+        message: {
+            channel_id: payload.channel_id,
+            user_id: socket.user._id,
+            message: payload.message,
+        },
+        user: socket.user
+    }
+    messageHandler.newMessage(input, (err, result) => {
+        if (err) {
+            // Error
+        } else {
+            // Send
+        }
+    })
+}
 const newMessage = (req, res, next) => {
     if (!req.body || !messageHandler.isValidMessage(req.body)) {
         return res.status(400).json({
@@ -53,4 +72,5 @@ module.exports = {
     newMessage,
     deleteMessage,
     updateMessage,
+    newMessageviaSocket,
 }

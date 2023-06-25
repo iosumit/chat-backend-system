@@ -83,7 +83,10 @@
         form.addEventListener('submit', async function (e) {
             e.preventDefault();
             if (input.value) {
-                const res = await socket.emit('message:send', input.value);
+                const res = await socket.emit('message:send', {
+                    "channel_id": "6496a3093f01d18789d0fe9e",
+                    "message": input.value
+                });
                 console.log(res)
                 addMsgToUi(input.value)
                 input.value = '';
@@ -91,7 +94,7 @@
         });
 
         socket.on('message:recieve', function (msg) {
-            addMsgToUi(JSON.stringify(msg))
+            addMsgToUi(msg.message)
         });
         function addMsgToUi(msg) {
             var item = document.createElement('li');
