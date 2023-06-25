@@ -1,12 +1,30 @@
 const ChannelSchema = require('../model/channel');
 const ChannelHandler = require('../handler/channelHandler');
 const { ERROR, SUCCESS, CHANNEL_TYPE } = require('../utils/consts');
-const { strings } = require('../utils/strings')
+const { strings } = require('../utils/strings');
+const { result } = require('lodash');
 
 
 // Get Channels
 const getChannels = (req, res, next) => {
-    return res.status(200).json({ status: SUCCESS });
+    const input = req.user;
+
+    ChannelHandler.getChannels(input, (err, result) => {
+        if (err) {
+            res.status(500)
+            res.json({
+                status: ERROR,
+                data: err
+            })
+        } else {
+            res.status(201)
+            res.json({
+                status: SUCCESS,
+                message: strings.fetched_successfully,
+                data: result
+            })
+        }
+    })
 }
 
 // Create Channels
