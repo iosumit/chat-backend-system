@@ -29,7 +29,7 @@ const getChannels = (req, res, next) => {
 
 // Create Channels
 const createChannels = (req, res, next) => {
-    if (!req.body || !req.body.name || !req.body.type) {
+    if (!req.body || !req.body.type) {
         return res.status(400).json({
             status: ERROR,
             message: strings.unseccessful_attempt,
