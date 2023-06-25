@@ -22,6 +22,7 @@ io.use((socket, next) => {
             next(new Error(strings.unauthorization_access));
             return socket.disconnect()
         }
+        console.log("User connected", result._id)
         socketInstant.setSocketInstance(result._id, socket);
         socket.on("disconnect", (reason) => {
             socketInstant.removeSocketInstance(result._id);

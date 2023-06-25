@@ -9,9 +9,8 @@ const socketInstances = require("../cache/socket.user.instance");
 const { strings } = require('../utils/strings');
 
 const socketMessageSend = function (users, message, next) {
-    console.log("Send", message);
     for (const u of users) {
-        socketInstances.getSocketInstance(u)?.emit(message);
+        socketInstances.getSocketInstance(u)?.emit('message:recieve', message);
     }
     next()
 };
@@ -28,26 +27,30 @@ const newMessage = (input, next) => {
     let users = [];
     async.series([
         cb => {
-            // Message Add to DB
-            MessageHelper.addObject(input).then(res => {
-                response = res;
-                return cb()
-            }).catch(err => cb(err));
-        },
-        cb => {
             // Get Users From Cache | DB
-            if (channelMap.isExist(input.channel_id)) {
-                users = channelMap.getUsers(input.channel_id);
+            if (channelMap.isExist(input.message.channel_id)) {
+                users = channelMap.getUsers(input.message.channel_id);
                 cb()
             } else {
                 // Get All the Users of current channel and Add to cache
-                ChannelHelper.getObjectById({ _id: input.channel_id }).then(res => {
+                ChannelHelper.getObjectByQuery({ _id: input.message.channel_id }).then(res => {
                     if (!res) return cb(strings.channel_not_found)
                     users = res.participated_users;
-                    channelMap.setUsers(input.channel_id, users);
+                    channelMap.setUsers(input.message.channel_id, users);
                     return cb()
                 }).catch(err => cb(err));
             }
+        },
+        cb => {
+            if (!users.includes(input.user._id)) return cb(strings.unauthorization_attempt)
+            return cb()
+        },
+        cb => {
+            // Message Add to DB
+            MessageHelper.addObject(input.message).then(res => {
+                response = res;
+                return cb()
+            }).catch(err => cb(err));
         },
         cb => {
             // Send to all Users

@@ -6,17 +6,6 @@ class BaseHelper {
         this.model = model;
     }
 
-    async getObjectById(filters) {
-        try {
-            return await this.model
-                .findById(filters.id)
-                .select(!_.isEmpty(filters.selectFrom) ? filters.selectFrom : {})
-                .exec();
-        } catch (error) {
-            throw error;
-        }
-    }
-
     async getAllObjectCount(filters) {
         try {
             const query = filters.query ? filters.query : {};

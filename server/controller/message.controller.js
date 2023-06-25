@@ -13,12 +13,15 @@ const newMessage = (req, res, next) => {
             message: strings.unauthorization_access,
         });
     }
-    req.input = {
-        channel_id: req.body.channel_id,
-        user_id: req.user._id,
-        message: req.body.message
+    const input = {
+        message: {
+            channel_id: req.body.channel_id,
+            user_id: req.user._id,
+            message: req.body.message,
+        },
+        user: req.user
     }
-    messageHandler.newMessage(req.input, (err, result) => {
+    messageHandler.newMessage(input, (err, result) => {
         if (err) {
             res.status(500)
             res.json({
