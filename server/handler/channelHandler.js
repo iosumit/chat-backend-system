@@ -1,17 +1,44 @@
 const async = require('async');
 const Channel = require('../model/channel');
-const { strings } = require('../utils/strings')
+const { strings } = require('../utils/strings');
+// const { result } = require('lodash');
 
 
 
 function getChannels(input, next) {
+    var modelName = {};
+
     async.series([
+        cb => { 
+
+            const query = { participated_users: input._id, active: true, is_deleted: false };
+            getObjectByQuery({ query }, (err, result) => {
+
+                if (err) {
+                    // return cb(result);
+                    return cb(strings.unseccessful_attempt);
+                    
+                } else { 
+                    modelName.channel = result;
+                    return cb();
+                }
+                
+            });
+        }
+        , err => {
+            if (err) {
+                next(err)
+            } else {
+                next(null, modelName)
+            }
+        }
 
     ])
 }
 
 function getObjectByQuery(filters, next) {
-    User.findOne(filters.query)
+    Channel
+        .find(filters.query)
         .select(filters.selectFrom ? filters.selectFrom : {})
         .lean()
         .then((result) => next(null, result))
@@ -47,6 +74,8 @@ const createChannels = (input, next) => {
 
 }
 
+
+
 module.exports = {
-    getChannels, createChannels, getObjectByQuery
+    getChannels, createChannels
 }
