@@ -7,13 +7,9 @@ const { result } = require('lodash');
 
 // Get Channels
 const getChannels = (req, res, next) => {
-    console.log("xxxxxxxxxxx");
-
     const input = req.user;
-    console.log(`HERE IS INPUT ${JSON.stringify(input)}`);
 
     ChannelHandler.getChannels(input, (err, result) => {
-
         if (err) {
             res.status(500)
             res.json({
@@ -24,7 +20,7 @@ const getChannels = (req, res, next) => {
             res.status(201)
             res.json({
                 status: SUCCESS,
-                message: "User Chat List",
+                message: strings.fetched_successfully,
                 data: result
             })
         }

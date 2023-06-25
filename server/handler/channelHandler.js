@@ -9,31 +9,27 @@ function getChannels(input, next) {
     var modelName = {};
 
     async.series([
-        cb => { 
+        cb => {
 
             const query = { participated_users: input._id, active: true, is_deleted: false };
             getObjectByQuery({ query }, (err, result) => {
-
                 if (err) {
-                    // return cb(result);
                     return cb(strings.unseccessful_attempt);
-                    
-                } else { 
-                    modelName.channel = result;
+
+                } else {
+                    modelName = result;
                     return cb();
                 }
-                
+
             });
         }
-        , err => {
-            if (err) {
-                next(err)
-            } else {
-                next(null, modelName)
-            }
+    ], err => {
+        if (err) {
+            next(err)
+        } else {
+            next(null, modelName)
         }
-
-    ])
+    })
 }
 
 function getObjectByQuery(filters, next) {
