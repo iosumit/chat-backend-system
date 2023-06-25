@@ -1,3 +1,5 @@
+require('dotenv').config()
+console.log(process.env)
 const http = require('http');
 const app = require('./app.js');
 const { Server } = require('socket.io');
@@ -23,6 +25,7 @@ io.use((socket, next) => {
             return socket.disconnect()
         }
         console.log("User connected", result._id)
+        socket.user = result;
         socketInstant.setSocketInstance(result._id, socket);
         socket.on("disconnect", (reason) => {
             socketInstant.removeSocketInstance(result._id);

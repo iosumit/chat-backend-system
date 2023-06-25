@@ -1,7 +1,7 @@
 const messageController = require('../controller/message.controller');
 
 const socketRoutes = (socket) => {
-    socket.on("message:send", messageController.deleteMessage);
+    socket.on("message:send", (payload) => messageController.newMessageviaSocket(payload, socket));
     socket.on("message:delete", messageController.deleteMessage);
     socket.on("message:update", messageController.deleteMessage);
 
