@@ -22,7 +22,8 @@ root
     "env": {
         "ENVIROMENT_TYPE": "PRODUCTION",
         "MONGO_URI": "Your Credential Of Mongo db",
-        "SERVER_AUTH_TOKEN_SECRET": "Token Secret"
+        "SERVER_AUTH_TOKEN_SECRET": "Token Secret",
+        "PORT": 8300
     }
 }
 ```

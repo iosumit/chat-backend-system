@@ -32,5 +32,5 @@ io.use((socket, next) => {
 
 io.on('connection', app.onSocketConnection);
 
-const port = process.env.port || 8300;
-server.listen(port);
+const port = process.env.PORT || 8300;
+server.listen(port, () => console.log(`Running on port ${port}`));

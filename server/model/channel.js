@@ -12,9 +12,12 @@ const channelSchema = mongoose.Schema({
     ],
     type: {
         type: String,
-        enum: [CHANNEL_TYPE.group, CHANNEL_TYPE.single]
+        enum: [CHANNEL_TYPE.group, CHANNEL_TYPE.single],
+        default: CHANNEL_TYPE.single
     },
-    profile_image_url: String,
+    profile_image_url: {
+        type: String,
+    },
     active: {
         type: Boolean,
         default: true
