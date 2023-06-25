@@ -37,3 +37,7 @@ npm install -g nodemon
 ```
 npm start
 ```
+
+Database Design
+![Database](assets/db.png)
+

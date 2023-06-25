@@ -10,21 +10,22 @@ const messageSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         required: true
     },
-    tagded_user: [mongoose.Schema.Types.ObjectId],
+    tagged_user: [mongoose.Schema.Types.ObjectId],
     message: String,
     type: {
         type: String,
+        default: MessageType.Text,
         enum: [MessageType.Text, MessageType.File, MessageType.Both]
     },
     file_urls: [String],
     seen_by: [mongoose.Schema.Types.ObjectId],
     is_deleted_by_user: {
         type: Boolean,
-        default: true
+        default: false
     },
     is_updated_by_user: {
         type: Boolean,
-        default: true
+        default: false
     },
     active: {
         type: Boolean,

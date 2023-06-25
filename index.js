@@ -2,7 +2,7 @@ const http = require('http');
 const app = require('./app.js');
 const { Server } = require('socket.io');
 const { verifyToken } = require('./server/utils/authorization.token.js');
-const socketInstant = require('./server/db/user.socket.instance.js');
+const socketInstant = require('./server/cache/socket.user.instance.js');
 const { strings } = require('./server/utils/strings.js');
 
 const server = http.createServer(app.restApp);
