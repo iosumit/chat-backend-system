@@ -73,7 +73,7 @@
 
     <script>
         var socket = io("ws://localhost:8300/", {
-            auth: { token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDg4NDA0ODNkYmNjZDU4NDM1ZDg5OWQiLCJmaXJzdF9uYW1lIjoiY2hhdCIsImxhc3RfbmFtZSI6ImlvIiwiY3JlYXRlZF9hdCI6IjIwMjMtMDYtMTNUMTA6MDk6MTIuNTM5WiIsInVzZXJuYW1lIjoiY2hhdC5pOXNvIiwiaWF0IjoxNjg2NjUwOTUyLCJleHAiOjE2ODcyNTU3NTJ9.rU3f9AC9Ha2VzRhPpcaz90EBF6cC_rxQS_z_eT4BTME" }
+            auth: { token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDg4MzgyNjVhZmUwMzU3MTI4YjEyY2IiLCJmaXJzdF9uYW1lIjoiY2hhdCIsImxhc3RfbmFtZSI6ImlvIiwidXNlcm5hbWUiOiJjaGF0LmlvIiwiaWF0IjoxNjg3NjgzOTYxLCJleHAiOjE2ODgyODg3NjF9.Qe-7wG0scWupqjBk7DKjc56ayFeoasAGPYl2HhqqCi4" }
         });
 
         var messages = document.getElementById('messages');
@@ -90,8 +90,8 @@
             }
         });
 
-        socket.on('648840483dbccd58435d899d', function (msg) {
-            addMsgToUi(msg)
+        socket.on('message:recieve', function (msg) {
+            addMsgToUi(JSON.stringify(msg))
         });
         function addMsgToUi(msg) {
             var item = document.createElement('li');

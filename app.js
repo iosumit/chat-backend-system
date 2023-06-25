@@ -8,11 +8,9 @@ const mongodb = require('./server/db/mongodb')
 const { ERROR } = require('./server/utils/consts')
 
 const userRoutes = require('./server/routes/userRoutes');
-const chatRoutes = require('./server/routes/chatRoutes');
 const channelRoutes = require('./server/routes/channelRoutes');
-const { verifyToken } = require('./server/utils/authorization.token');
-
-const messageHandler = require('./server/handler/messageHandler')
+const messageRoutes = require('./server/routes/messageRoutes');
+const socketRoutes = require('./server/routes/socketRoute');
 
 //--------REST API-----------//
 restApp.use(cors({
@@ -24,8 +22,7 @@ restApp.use(morgan('dev'))
 
 restApp.use('/user', userRoutes);
 restApp.use('/channel', channelRoutes);
-restApp.use('/chat', chatRoutes);
-// restApp.use('/setting', userRoute);
+restApp.use('/message', messageRoutes);
 
 restApp.use((req, res, next) => {
     const error = new err('Not found', 404);
@@ -39,23 +36,7 @@ restApp.use((error, req, res, next) => {
     })
 })
 // --------!REST API-----------//
-// --------Web Socket-----------//
-const onSocketConnection = (socket) => {
-    socket.on("message:send", messageHandler.socketMessageSend);
-    socket.on("message:delete", messageHandler.socketMessageDelete);
-    socket.on("message:update", messageHandler.socketMessageUpdate);
 
-    socket.on("channel:block", () => { });
-    socket.on("channel:unblock", () => { });
-    socket.on("channel:update", () => { });
-    socket.on("channel:new", () => { });
-
-    socket.on("user:update", () => { });
-    socket.on("user:delete", () => { });
-    // User Connected
-
-}
-// --------!Web Socket-----------//
-
+const onSocketConnection = socketRoutes
 
 module.exports = { restApp, onSocketConnection };
