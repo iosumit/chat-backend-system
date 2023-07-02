@@ -16,16 +16,12 @@ root
 ````
 ---------
 ### Project Setup
-- Create nodemon.json file on root dir and below
-```json
-{
-    "env": {
-        "ENVIROMENT_TYPE": "PRODUCTION",
-        "MONGO_URI": "Your Credential Of Mongo db",
-        "SERVER_AUTH_TOKEN_SECRET": "Token Secret",
-        "PORT": 8300
-    }
-}
+- Create .env file on root dir and below
+```shell
+ENVIROMENT_TYPE=dev
+MONGO_URI=<-----Mongo Uri------->
+SERVER_AUTH_TOKEN_SECRET=<----Token Secret---->
+PORT=8300
 ```
 ---
 
