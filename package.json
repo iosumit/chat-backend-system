@@ -4,7 +4,7 @@
   "description": "\"Chat Backend System\"",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js",
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -19,11 +19,16 @@
   "homepage": "https://github.com/iosumit/chat-backend-system#readme",
   "dependencies": {
     "async": "^3.2.4",
+    "body-parser": "^1.20.2",
     "cors": "^2.8.5",
-    "dotenv": "^16.1.3",
+    "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.0",
     "lodash": "^4.17.21",
+    "lru-cache": "^9.1.2",
+    "mongoose": "^7.2.3",
+    "morgan": "^1.10.0",
+    "socket.io": "^4.6.2",
     "uuid": "^9.0.0"
   }
 }

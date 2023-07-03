@@ -1,26 +1,42 @@
 const express = require('express');
-const app = express();
-const db = require('./server/db/db');
+const restApp = express();
 const cors = require('cors');
+const morgan = require('morgan');
+const err = require('./server/utils/error')
+const bodyParser = require('body-parser')
+const mongodb = require('./server/db/mongodb')
+const { ERROR } = require('./server/utils/consts')
 
-db.dbInit();
+const userRoutes = require('./server/routes/userRoutes');
+const channelRoutes = require('./server/routes/channelRoutes');
+const messageRoutes = require('./server/routes/messageRoutes');
+const socketRoutes = require('./server/routes/socketRoute');
 
-const userRoute = require('./server/routes/user');
-const chatRoute = require('./server/routes/chat');
-
-
-app.use(cors({
+//--------REST API-----------//
+restApp.use(cors({
     origin: '*'
 }));
-app.use('/user', userRoute);
-app.use('/chat', userRoute);
-app.use('/setting', userRoute);
+restApp.use(bodyParser.urlencoded({ extended: false }))
+restApp.use(bodyParser.json())
+restApp.use(morgan('dev'))
 
-// app.use('/', (req, res, next) => {
-//     res.status(200).json({
-//         status: 'Success',
-//         message: "Server is working!"
-//     })
-// });
+restApp.use('/user', userRoutes);
+restApp.use('/channel', channelRoutes);
+restApp.use('/message', messageRoutes);
 
-module.exports = app;
+restApp.use((req, res, next) => {
+    const error = new err('Not found', 404);
+    next(error);
+})
+restApp.use((error, req, res, next) => {
+    res.status(error.status || 500);
+    return res.json({
+        status: ERROR,
+        message: error.message
+    })
+})
+// --------!REST API-----------//
+
+const onSocketConnection = socketRoutes
+
+module.exports = { restApp, onSocketConnection };

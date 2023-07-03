@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Socket.IO chat</title>
+    <style>
+        .box {
+            border: 1px solid rgba(128, 128, 128, 0.532);
+            align-self: center;
+            width: 400px;
+            height: 500px;
+            margin: auto;
+            margin-top: 100px;
+            border-radius: 16px;
+            display: flex;
+            padding: 0px;
+            flex-direction: column;
+        }
+
+        li {
+            display: table;
+            list-style: none;
+            padding: 4px 8px 4px 8px;
+            background-color: rgb(240, 236, 236);
+            border-radius: 6px;
+            margin-top: 4px;
+            box-shadow: 2px 2px 2px rgba(38, 27, 27, 0.477);
+        }
+
+        form {
+            display: flex;
+        }
+
+        button {
+            height: 44px;
+            border-bottom-right-radius: 16px;
+            font-size: 16px;
+        }
+
+        #messages {
+            height: 100%;
+            background-color: rgba(255, 255, 0, 0.201);
+            overflow: auto;
+            padding: 0;
+            padding-inline: 16px;
+            padding-top: 16px;
+            margin: 0;
+            padding-bottom: 16px;
+        }
+
+        input {
+            height: 40px;
+            width: 100%;
+            padding-inline: 16px;
+            border-bottom-left-radius: 16px;
+            border: 1px solid rgba(128, 128, 128, 0.532);
+            font-size: 18px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="box">
+        <ul id="messages"></ul>
+        <form id="form" action="">
+            <input id="input" /><button>Send</button>
+        </form>
+    </div>
+
+
+    <script src="node_modules/socket.io/client-dist/socket.io.js"></script>
+
+    <script>
+        var socket = io("ws://localhost:8300/", {
+            auth: { token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDg4MzgyNjVhZmUwMzU3MTI4YjEyY2IiLCJmaXJzdF9uYW1lIjoiY2hhdCIsImxhc3RfbmFtZSI6ImlvIiwidXNlcm5hbWUiOiJjaGF0LmlvIiwiaWF0IjoxNjg3NjgzOTYxLCJleHAiOjE2ODgyODg3NjF9.Qe-7wG0scWupqjBk7DKjc56ayFeoasAGPYl2HhqqCi4" }
+        });
+
+        var messages = document.getElementById('messages');
+        var form = document.getElementById('form');
+        var input = document.getElementById('input');
+
+        form.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            if (input.value) {
+                const res = await socket.emit('message:send', {
+                    "channel_id": "6496a3093f01d18789d0fe9e",
+                    "message": input.value
+                });
+                console.log(res)
+                addMsgToUi(input.value)
+                input.value = '';
+            }
+        });
+
+        socket.on('message:recieve', function (msg) {
+            addMsgToUi(msg.message)
+        });
+        function addMsgToUi(msg) {
+            var item = document.createElement('li');
+            item.textContent = msg;
+            messages.appendChild(item);
+            messages.scrollTo(0, messages.scrollHeight);
+        }
+    </script>
+</body>
+
+</html>
