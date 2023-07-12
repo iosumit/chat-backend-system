@@ -36,4 +36,4 @@ io.use((socket, next) => {
 io.on('connection', app.onSocketConnection);
 
 const port = process.env.PORT || 8300;
-server.listen(port, () => console.log(`Running on port ${port}`));
+module.exports = server.listen(port, () => console.log(`Running on port ${port}`));

@@ -104,5 +104,5 @@ function getObjectByQuery(filters, next) {
 }
 
 module.exports = {
-    userAuthenticateHandler, createNewUser, getUserInfo, 
+    userAuthenticateHandler, createNewUser, getUserInfo,
 }
